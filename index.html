@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Om Sri Akshaya Crackers - 2026 Price List & Order Form</title>
+  <meta name="description" content="Om Sri Akshaya Crackers Sivakasi 2026 Wholesale & Retail Price List, Online Order Form with automatic calculation and PDF download.">
+  <link rel="stylesheet" href="style.css">
+  <!-- html2canvas & jsPDF for perfect page-by-page PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- SheetJS for Excel Import / Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <!-- Hidden File Input for Excel Import -->
+  <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display: none;" />
+
+  <!-- Fixed Top Navigation & Live Stats Bar -->
+  <header class="top-nav" id="mainHeader">
+    <div class="brand-section">
+      <div class="brand-badge">2026</div>
+      <div>
+        <h1 class="brand-title">OM SRI AKSHAYA CRACKERS</h1>
+        <span class="brand-sub">Sivakasi Price List & Order Form</span>
+      </div>
+    </div>
+
+    <!-- Live Calculation Stats -->
+    <div class="nav-stats" id="navStats">
+      <div class="stat-item">
+        <span class="stat-label">Selected Items</span>
+        <span class="stat-value" id="statTotalItems">0</span>
+      </div>
+      <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.15);"></div>
+      <div class="stat-item">
+        <span class="stat-label">Total Qty</span>
+        <span class="stat-value" id="statTotalQty">0</span>
+      </div>
+      <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.15);"></div>
+      <div class="stat-item">
+        <span class="stat-label">Grand Total</span>
+        <span class="stat-value highlight" id="statGrandTotal">₹ 0.00</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="nav-actions">
+      <button type="button" class="btn btn-excel" id="btnImportExcel" title="Import from Excel (.xlsx / .csv)">
+        <span>📊</span> Import Excel
+      </button>
+      <button type="button" class="btn btn-excel" id="btnExportExcel" title="Export to Excel (.xlsx)">
+        <span>📥</span> Export Excel
+      </button>
+      <button type="button" class="btn btn-secondary" id="btnAddPage" title="Add New Page">
+        <span>📄</span> + Page
+      </button>
+      <button type="button" class="btn btn-secondary" id="btnAddCategory" title="Add New Category">
+        <span>📁</span> + Category
+      </button>
+      <button type="button" class="btn btn-secondary" id="btnAddItem" title="Add New Product Row">
+        <span>➕</span> + Product
+      </button>
+      <button type="button" class="btn btn-edit" id="btnToggleEdit" title="Toggle Rate, Name Editing & Reorder">
+        <span>✏️</span> Edit Mode
+      </button>
+      <button type="button" class="btn btn-reset" id="btnResetData" title="Reset to Original Defaults">
+        <span>🔄</span> Reset
+      </button>
+      <button type="button" class="btn btn-secondary" id="btnPrint" title="Print Document">
+        <span>🖨️</span> Print
+      </button>
+      <button type="button" class="btn btn-primary" id="btnDownloadPdf" title="Download Multi-Page PDF">
+        <span>📄</span> Download PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- Controls Sub-Bar (Search & Page Jump) -->
+  <nav class="controls-bar" id="controlsBar" aria-label="Quick Tools">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search product (English / தமிழ்)..." autocomplete="off">
+    </div>
+
+    <div class="quick-tools">
+      <span>Jump to Page:</span>
+      <div class="page-jump-links">
+        <a href="#page-1" class="page-chip">Page 1 (1 - 45)</a>
+        <a href="#page-2" class="page-chip">Page 2 (46 - 95)</a>
+        <a href="#page-3" class="page-chip">Page 3 (96 - 144)</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Pages Wrapper (3 Exact A4 Sheets) -->
+  <main class="pages-wrapper" id="pagesContainer">
+    <!-- Rendered dynamically by app.js from data.js -->
+  </main>
+
+  <!-- PDF Generation Loading Overlay -->
+  <div class="pdf-loading-overlay" id="pdfLoadingOverlay">
+    <div class="pdf-spinner"></div>
+    <div class="pdf-loading-title">Generating High Quality PDF...</div>
+    <div class="pdf-loading-sub">Please wait while we render all 3 pages with Tamil typography.</div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
