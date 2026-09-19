@@ -1,9 +1,9 @@
 const PRICELIST_DATA = {
   bankDetails: {
-    name: "Tamil Mani Traders",
-    bank: "AXIS BANK, SIVAKASI",
+    name: "TAMILMANI TRADERS",
+    bank: "TMB",
     gpay: "99947 03605",
-    accountNo: "12345678909876",
+    accountNo: "341150050800330",
     ifsc: "ExampleUPI"
   },
   pages: [
