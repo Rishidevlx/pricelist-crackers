@@ -4,7 +4,7 @@ const PRICELIST_DATA = {
     bank: "TMB",
     gpay: "99947 03605",
     accountNo: "341150050800330",
-    ifsc: "ExampleUPI"
+    ifsc: "TMBL0000341"
   },
   pages: [
     {
