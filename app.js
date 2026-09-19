@@ -1,5 +1,5 @@
 // Storage Key
-const STORAGE_KEY = 'akshaya_pricelist_state_v4';
+const STORAGE_KEY = 'tamilmani_pricelist_state_v1';
 
 // Application State
 let appData = {
@@ -20,20 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateLiveSummary();
 });
 
-// Load data from LocalStorage or fallback to default data.js
+// Load data: Read directly from PRICELIST_DATA, preserving any user quantities
 function loadData() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      appData = JSON.parse(saved);
-      normalizeItemIds();
-      return;
-    } catch (e) {
-      console.error('Failed to parse local storage, loading default data:', e);
-    }
-  }
-
-  // Load from PRICELIST_DATA default
   const flatCategories = [];
   PRICELIST_DATA.pages.forEach(p => {
     p.sections.forEach(s => {
@@ -57,7 +45,7 @@ function loadData() {
     categories: flatCategories,
     bankDetails: { ...PRICELIST_DATA.bankDetails }
   };
-  saveData();
+  normalizeItemIds();
 }
 
 function normalizeItemIds() {
@@ -293,14 +281,14 @@ function renderAllPages() {
       const b = appData.bankDetails;
       bankFooter.innerHTML = `
         <div class="bank-row-1">
-          <span>Name: <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="name">${b.name}</span></span>
-          <span>Bank : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="bank">${b.bank}</span></span>
-          <span>Gpay: <span class="bank-gpay" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="gpay">${b.gpay}</span></span>
+          <span class="bank-col-1">Name: <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="name">${b.name}</span></span>
+          <span class="bank-col-2">Bank : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="bank">${b.bank}</span></span>
+          <span class="bank-col-3">Gpay: <span class="bank-gpay" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="gpay">${b.gpay}</span></span>
         </div>
         <div class="bank-row-2">
-          <span>A/c : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="accountNo">${b.accountNo}</span></span>
-          <span>IFSC : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="ifsc">${b.ifsc}</span></span>
-          <span class="page-total-summary" style="font-weight: 800; color: #b91c1c;"></span>
+          <span class="bank-col-1">A/c : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="accountNo">${b.accountNo}</span></span>
+          <span class="bank-col-2">IFSC : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="ifsc">${b.ifsc}</span></span>
+          <span class="bank-col-3 page-total-summary" style="font-weight: 800; color: #b91c1c;"></span>
         </div>
       `;
       tableContainer.appendChild(bankFooter);

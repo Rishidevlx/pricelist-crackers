@@ -266,8 +266,8 @@ const PRICELIST_DATA = {
             { sNo: 127, nameEng: "Laptop", nameTam: "லேப்டாப்", rate: 240.00, per: "1 Box" },
             { sNo: 128, nameEng: "Super Deluxe", nameTam: "சூப்பர் டீலக்ஸ்", rate: 130.00, per: "1 Box" },
             { sNo: 129, nameEng: "Roll Cap", nameTam: "ரோல் கேப்", rate: 75.00, per: "1 Box" },
-            { sNo: 130, nameEng: "10 X 10 Shorts Multi Colour Crackling", nameTam: "10 X 10 ஷாட்ஸ் மல்டி கலர் கிராக்கிலிங்", rate: 0.00, per: "1 Box" },
-            { sNo: 131, nameEng: "Wiva 10 X 10 Multi Colour Crackling", nameTam: "விவா 10 X 10 மல்டி கலர் கிராக்கிலிங்", rate: 0.00, per: "1 Box" }
+            { sNo: 130, nameEng: "10 X 10 Shorts Multi Colour Crackling", nameTam: "10 X 10 ஷாட்ஸ் மல்டி கலர் கிராக்கிலிங்", rate: 4100.00, per: "1 Box" },
+            { sNo: 131, nameEng: "Wiva 10 X 10 Multi Colour Crackling", nameTam: "விவா 10 X 10 மல்டி கலர் கிராக்கிலிங்", rate: 4500.00, per: "1 Box" }
           ]
         },
         {
