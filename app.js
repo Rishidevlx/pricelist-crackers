@@ -1,5 +1,5 @@
 // Storage Key
-const STORAGE_KEY = 'akshaya_pricelist_state_v2';
+const STORAGE_KEY = 'akshaya_pricelist_state_v4';
 
 // Application State
 let appData = {

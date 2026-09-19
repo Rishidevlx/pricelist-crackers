@@ -370,12 +370,12 @@ body {
 }
 
 /* Column Sizing */
-.col-sno { width: 5.5%; }
-.col-name { width: 53.5%; }
-.col-rate { width: 11.5%; }
-.col-per { width: 9.5%; }
-.col-qty { width: 9%; }
-.col-amt { width: 11%; }
+.col-sno { width: 5%; }
+.col-name { width: 57%; }
+.col-rate { width: 10.5%; }
+.col-per { width: 9%; }
+.col-qty { width: 8.5%; }
+.col-amt { width: 10%; }
 .col-actions { width: 28px; }
 
 /* Yellow Category Rows */
@@ -411,9 +411,9 @@ body {
   color: #0b3c5d;
   font-family: var(--font-tam);
   font-weight: 800;
-  font-size: 11px;
+  font-size: 10.5px;
   text-align: left;
-  width: 28.5%;
+  width: 32%;
 }
 
 .cat-per {
@@ -455,7 +455,7 @@ body {
   font-weight: 700;
   font-size: 10px;
   color: #0b2545;
-  width: 5.5%;
+  width: 5%;
 }
 
 /* Product Name 2 Separate Real Columns (Solid Center Line) */
@@ -473,10 +473,11 @@ body {
 }
 
 .cell-name-tam {
-  width: 28.5%;
+  width: 32%;
   font-family: var(--font-tam);
   font-weight: 700;
-  font-size: 9.5px;
+  font-size: 9px;
+  letter-spacing: -0.1px;
   color: var(--theme-red);
   text-align: left;
   white-space: nowrap;
