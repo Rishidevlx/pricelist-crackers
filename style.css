@@ -1,14 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Mukta+Malar:wght@600;700;800&family=Noto+Sans+Tamil:wght@600;700;800;900&family=Inter:wght@600;700;800;900&family=Outfit:wght@600;700;800&display=swap');
+
 :root {
   --theme-gold: #cba135;
   --theme-gold-dark: #a8801d;
   --theme-gold-light: #fef9e7;
   --theme-red: #d91c1c;
   --theme-red-dark: #b31414;
-  --theme-yellow: #fff000;
+  --theme-yellow: #ffff00;
   --theme-yellow-light: #fffce0;
-  --theme-blue-text: #0b2545;
+  --theme-blue: #0038a8;
+  --theme-purple: #7e22ce;
+  --theme-green: #15803d;
   --theme-grid-border: #000000;
-  --theme-bg-page: #cba135;
+  --theme-bg-page: #009db8;
   --font-tam: 'Mukta Malar', 'Noto Sans Tamil', sans-serif;
   --font-eng: 'Inter', sans-serif;
   --font-brand: 'Outfit', sans-serif;
@@ -144,6 +148,7 @@ body {
   color: white;
   box-shadow: 0 4px 14px rgba(225, 29, 72, 0.4);
 }
+
 .btn-primary:hover {
   background: linear-gradient(135deg, #f43f5e, #e11d48);
   transform: translateY(-1px);
@@ -154,6 +159,7 @@ body {
   color: white;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
+
 .btn-excel:hover {
   background: linear-gradient(135deg, #34d399, #10b981);
   transform: translateY(-1px);
@@ -164,6 +170,7 @@ body {
   color: #f1f5f9;
   border: 1px solid #475569;
 }
+
 .btn-secondary:hover {
   background: #475569;
   color: #fff;
@@ -173,6 +180,7 @@ body {
   background: #0284c7;
   color: white;
 }
+
 .btn-edit.active {
   background: #16a34a;
   box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
@@ -182,6 +190,7 @@ body {
   background: #475569;
   color: #cbd5e1;
 }
+
 .btn-reset:hover {
   background: #64748b;
   color: #fff;
@@ -201,7 +210,7 @@ body {
   padding: 12px 18px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .search-box {
@@ -259,6 +268,7 @@ body {
   border: 1px solid #334155;
   transition: all 0.2s;
 }
+
 .page-chip:hover {
   background: #0284c7;
   color: white;
@@ -281,7 +291,7 @@ body {
   min-height: 297mm;
   max-height: 297mm;
   background-color: var(--theme-bg-page);
-  padding: 5mm 6mm 6mm 6mm;
+  padding: 3mm 5mm 3.5mm 5mm;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   border-radius: 4px;
   position: relative;
@@ -297,11 +307,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4mm 2px 4mm;
+  padding: 0 4mm 1px 4mm;
+  height: 16px;
   font-family: var(--font-tam);
   color: #ffffff;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
@@ -321,7 +332,7 @@ body {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .btn-del-page:hover {
@@ -352,17 +363,19 @@ body {
 .pricelist-table thead tr {
   background-color: var(--theme-red);
   color: #ffffff;
-  height: 22px;
+  height: 23px;
 }
 
 .pricelist-table th {
-  padding: 2px 3px;
+  padding: 1px 2px;
   font-weight: 800;
   font-size: 10.5px;
   text-align: center;
   border-right: 1.5px solid #ffffff;
   letter-spacing: 0.2px;
-  line-height: 1.15;
+  line-height: 1.1;
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .pricelist-table th:last-child {
@@ -370,18 +383,64 @@ body {
 }
 
 /* Column Sizing */
-.col-sno { width: 5%; }
-.col-name { width: 57%; }
-.col-rate { width: 10.5%; }
-.col-per { width: 9%; }
-.col-qty { width: 8.5%; }
-.col-amt { width: 10%; }
-.col-actions { width: 28px; }
+.col-sno {
+  width: 4.5%;
+}
+
+.col-name-eng {
+  width: 24%;
+}
+
+.col-name-tam {
+  width: 28.5%;
+  font-family: var(--font-tam);
+  font-size: 10.5px;
+}
+
+.col-mrp {
+  width: 12%;
+}
+
+.col-per {
+  width: 6.5%;
+}
+
+.col-rate {
+  width: 9.5%;
+}
+
+th.col-rate {
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  padding: 1px 1px;
+}
+
+th.col-rate .th-sub {
+  font-size: 6.5px;
+  font-weight: 700;
+  display: block;
+  letter-spacing: -0.1px;
+  opacity: 0.95;
+  margin-top: 1px;
+}
+
+.col-qty {
+  width: 6.5%;
+}
+
+.col-amt {
+  width: 8.5%;
+}
+
+.col-actions {
+  width: 28px;
+}
 
 /* Yellow Category Rows */
 .category-row {
   background-color: var(--theme-yellow) !important;
-  height: 17px;
+  height: 16.5px;
 }
 
 .cat-cell {
@@ -389,7 +448,7 @@ body {
   border-top: 1px solid var(--theme-grid-border);
   border-bottom: 1px solid var(--theme-grid-border);
   border-right: 1px solid var(--theme-grid-border);
-  padding: 0 4px;
+  padding: 0 3px;
 }
 
 .cat-cell:last-child {
@@ -397,37 +456,38 @@ body {
 }
 
 .cat-name-eng {
-  color: var(--theme-red-dark);
+  color: var(--theme-red);
   text-transform: uppercase;
   font-family: var(--font-eng);
-  font-weight: 800;
-  font-size: 10px;
-  letter-spacing: 0.2px;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0.1px;
   text-align: left;
-  width: 25%;
+  width: 24%;
 }
 
 .cat-name-tam {
-  color: #0b3c5d;
+  color: var(--theme-blue);
   font-family: var(--font-tam);
-  font-weight: 800;
-  font-size: 10.5px;
+  font-weight: 900;
+  font-size: 12.5px;
   text-align: left;
-  width: 32%;
+  width: 28.5%;
 }
 
 .cat-per {
   font-family: var(--font-eng);
-  font-weight: 700;
-  font-size: 9.5px;
-  color: #0b3c5d;
+  font-weight: 800;
+  font-size: 10px;
+  color: var(--theme-blue);
   text-align: center;
 }
 
 /* Item Rows */
 .pricelist-table tbody tr.item-row {
   border-bottom: 1px solid var(--theme-grid-border);
-  height: 17px;
+  min-height: 16.8px;
+  height: auto;
   transition: background-color 0.15s;
 }
 
@@ -440,10 +500,10 @@ body {
 }
 
 .pricelist-table td {
-  padding: 0 3px;
+  padding: 1px 2px;
   vertical-align: middle;
   border-right: 1px solid var(--theme-grid-border);
-  line-height: 1.1;
+  line-height: 1.15;
 }
 
 .pricelist-table td:last-child {
@@ -452,71 +512,86 @@ body {
 
 .cell-sno {
   text-align: center;
-  font-weight: 700;
-  font-size: 10px;
-  color: #0b2545;
-  width: 5%;
+  font-weight: 800;
+  font-size: 10.5px;
+  color: #000000;
+  width: 4.5%;
+  white-space: nowrap;
+  padding: 0 1px;
 }
 
 /* Product Name 2 Separate Real Columns (Solid Center Line) */
 .cell-name-eng {
-  width: 25%;
+  width: 24%;
   font-family: var(--font-eng);
-  font-weight: 700;
-  font-size: 9.5px;
-  color: #0b2545;
+  font-weight: 800;
+  font-size: 11.5px;
+  color: var(--theme-blue);
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  padding: 0 4px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.15;
+  padding: 1px 3px;
 }
 
 .cell-name-tam {
-  width: 32%;
+  width: 28.5%;
   font-family: var(--font-tam);
-  font-weight: 700;
-  font-size: 9px;
-  letter-spacing: -0.1px;
+  font-weight: 800;
+  font-size: 13px;
   color: var(--theme-red);
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  padding: 0 4px;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.15;
+  padding: 1px 3px;
 }
 
-.cell-rate {
+.cell-mrp {
   text-align: right;
-  font-weight: 700;
-  font-size: 10px;
-  color: #000000;
+  font-weight: 800;
+  font-size: 11.5px;
+  color: var(--theme-purple);
   padding-right: 4px;
+  white-space: nowrap;
 }
 
 .cell-per {
   text-align: center;
-  font-weight: 600;
-  font-size: 9.5px;
-  color: #0b2545;
+  font-weight: 800;
+  font-size: 10px;
+  color: var(--theme-blue);
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.cell-rate {
+  text-align: right;
+  font-weight: 800;
+  font-size: 11.5px;
+  color: var(--theme-green);
+  padding-right: 4px;
+  white-space: nowrap;
 }
 
 .cell-qty {
   text-align: center;
-  padding: 0;
+  padding: 0 1px;
 }
 
 .qty-input {
   width: 100%;
-  max-width: 40px;
+  max-width: 30px;
   height: 15px;
-  border: 1px solid #94a3b8;
+  border: 1px solid #000000;
   border-radius: 2px;
   text-align: center;
   font-family: var(--font-eng);
-  font-weight: 700;
-  font-size: 10px;
-  color: #0f172a;
+  font-weight: 800;
+  font-size: 10.5px;
+  color: #000000;
   background: #ffffff;
   outline: none;
   padding: 0;
@@ -537,18 +612,19 @@ body {
 
 .cell-amt {
   text-align: right;
-  font-weight: 700;
-  font-size: 10px;
-  color: #0b2545;
-  padding-right: 4px;
+  font-weight: 800;
+  font-size: 11.5px;
+  color: #000000;
+  padding-right: 3px;
 }
 
 .cell-amt.has-val {
-  color: #b91c1c;
+  color: var(--theme-red);
 }
 
 /* Drag & Drop Visuals */
-.draggable-cat, .draggable-item {
+.draggable-cat,
+.draggable-item {
   cursor: grab;
 }
 
@@ -602,7 +678,8 @@ body {
   color: #0b2545;
 }
 
-.bank-row-1, .bank-row-2 {
+.bank-row-1,
+.bank-row-2 {
   display: grid;
   grid-template-columns: 38% 32% 30%;
   align-items: center;
@@ -671,7 +748,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .pdf-loading-title {
@@ -694,7 +773,8 @@ body {
     margin: 0;
   }
 
-  html, body {
+  html,
+  body {
     background: transparent !important;
     padding: 0 !important;
     margin: 0 !important;

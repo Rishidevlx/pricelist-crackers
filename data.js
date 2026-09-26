@@ -30,7 +30,14 @@ const PRICELIST_DATA = {
           headerPer: "",
           items: [
             { sNo: 8, nameEng: "Red Bijili 100's", nameTam: "ரெட் பிஜிலி", rate: 40.00, per: "1 Bag" },
-            { sNo: 9, nameEng: "Stripped Bijili 100's", nameTam: "கோடு பிஜிலி", rate: 50.00, per: "1 Bag" },
+            { sNo: 9, nameEng: "Stripped Bijili 100's", nameTam: "கோடு பிஜிலி", rate: 50.00, per: "1 Bag" }
+          ]
+        },
+        {
+          categoryEng: "PAPER BOMBS",
+          categoryTam: "பேப்பர் பாம்ஸ்",
+          headerPer: "",
+          items: [
             { sNo: 10, nameEng: "1/4 kg paper bomb", nameTam: "1/4 கிலோ பேப்பர் பாம்", rate: 50.00, per: "1 Box" },
             { sNo: 11, nameEng: "1/2 kg Paper Bomb", nameTam: "1/2 கிலோ பேப்பர் பாம்", rate: 100.00, per: "1 Box" },
             { sNo: 12, nameEng: "1 kg Paper Bomb", nameTam: "1 கிலோ பேப்பர் பாம்", rate: 200.00, per: "1 Box" }
@@ -239,7 +246,7 @@ const PRICELIST_DATA = {
             { sNo: 114, nameEng: "3½\" Pipe (Seven Step)", nameTam: "3½\" பைப் செவன் ஸ்டெப்", rate: 440.00, per: "1 Box" },
             { sNo: 115, nameEng: "4\" Pipe", nameTam: "4\" பைப்", rate: 390.00, per: "1 Box" },
             { sNo: 116, nameEng: "4\" Pipe Jumbo (2 Pcs)", nameTam: "4\" பைப் ஜம்போ (2பீஸ்)", rate: 1100.00, per: "1 Box" },
-            { sNo: 117, nameEng: "Nayagara", nameTam: "நயாகரா", rate: 420.00, per: "1 Box" }
+            { sNo: 117, nameEng: "Nayagara Falls", nameTam: "நயாகரா ஃபால்ஸ்", rate: 420.00, per: "1 Box" }
           ]
         },
         {
@@ -254,7 +261,9 @@ const PRICELIST_DATA = {
             { sNo: 122, nameEng: "30 MultiColour with Crackling", nameTam: "30 மல்டிகலர் வித் கிராக்லிங்", rate: 450.00, per: "1 Box" },
             { sNo: 123, nameEng: "60 MultiColour with Crackling", nameTam: "60 மல்டிகலர் வித் கிராக்லிங்", rate: 900.00, per: "1 Box" },
             { sNo: 124, nameEng: "120 MultiColour with Crackling", nameTam: "120 மல்டிகலர் வித் கிராக்லிங்", rate: 1800.00, per: "1 Box" },
-            { sNo: 125, nameEng: "240 MultiColour with Crackling", nameTam: "240 மல்டிகலர் வித் கிராக்லிங்", rate: 3600.00, per: "1 Box" }
+            { sNo: 125, nameEng: "240 MultiColour with Crackling", nameTam: "240 மல்டிகலர் வித் கிராக்லிங்", rate: 3600.00, per: "1 Box" },
+            { sNo: 130, nameEng: "10 X 10 Wave multi color shots", nameTam: "10 X 10 வேவ் மல்டி கலர் ஷாட்ஸ்", rate: 4100.00, per: "1 Box" },
+            { sNo: 131, nameEng: "10 X 10 Wiva multi color crackling shots", nameTam: "10 X 10 விவா மல்டி கலர் கிராக்கிலிங் ஷாட்ஸ்", rate: 4500.00, per: "1 Box" }
           ]
         },
         {
@@ -266,8 +275,6 @@ const PRICELIST_DATA = {
             { sNo: 127, nameEng: "Laptop", nameTam: "லேப்டாப்", rate: 240.00, per: "1 Box" },
             { sNo: 128, nameEng: "Super Deluxe", nameTam: "சூப்பர் டீலக்ஸ்", rate: 130.00, per: "1 Box" },
             { sNo: 129, nameEng: "Roll Cap", nameTam: "ரோல் கேப்", rate: 75.00, per: "1 Box" },
-            { sNo: 130, nameEng: "10 X 10 Shorts Multi Colour Crackling", nameTam: "10 X 10 ஷாட்ஸ் மல்டி கலர் கிராக்கிலிங்", rate: 4100.00, per: "1 Box" },
-            { sNo: 131, nameEng: "Wiva 10 X 10 Multi Colour Crackling", nameTam: "விவா 10 X 10 மல்டி கலர் கிராக்கிலிங்", rate: 4500.00, per: "1 Box" }
           ]
         },
         {
@@ -296,7 +303,7 @@ const PRICELIST_DATA = {
             { sNo: 150, nameEng: "30 cm Green Sparklers", nameTam: "30 செமி பச்சை கம்பி", rate: 50.00, per: "1 Box" },
             { sNo: 151, nameEng: "30 cm Red Sparklers", nameTam: "30 செமி சிவப்பு கம்பி", rate: 60.00, per: "1 Box" },
             { sNo: 152, nameEng: "50 cm Electric Sparklers", nameTam: "50 செமி சாதா கம்பி", rate: 210.00, per: "1 Box" },
-            { sNo: 153, nameEng: "50 cm Glittering Sparklers", nameTam: "50 செமி கிலிடரிங் கம்பி", rate: 200.00, per: "1 Box" },
+            { sNo: 153, nameEng: "50 cm Glittering Sparklers", nameTam: "50 செமி கிலிடரிங் கம்பி", rate: 220.00, per: "1 Box" },
             { sNo: 154, nameEng: "75 cm Electric Sparklers", nameTam: "75 செமி எலக்ட்ரிக் கம்பி", rate: 350.00, per: "1 Box" }
           ]
         },
@@ -305,10 +312,10 @@ const PRICELIST_DATA = {
           categoryTam: "கிப்ட் பாக்ஸ்",
           headerPer: "",
           items: [
-            { sNo: 155, nameEng: "30 Items", nameTam: "30 ஐட்டம்ஸ்", rate: 450.00, per: "1 Box" },
-            { sNo: 156, nameEng: "40 Items", nameTam: "40 ஐட்டம்ஸ்", rate: 650.00, per: "1 Box" },
-            { sNo: 157, nameEng: "50 Items", nameTam: "50 ஐட்டம்ஸ்", rate: 900.00, per: "1 Box" },
-            { sNo: 158, nameEng: "60 items", nameTam: "60 ஐட்டம்ஸ்", rate: 1200.00, per: "1 Box" }
+            { sNo: 155, nameEng: "30 Items (OREO)", nameTam: "30 ஐட்டம்ஸ் (ஓரியோ)", rate: 450.00, per: "1 Box" },
+            { sNo: 156, nameEng: "40 Items (5 STAR)", nameTam: "40 ஐட்டம்ஸ் (5 ஸ்டார்)", rate: 650.00, per: "1 Box" },
+            { sNo: 157, nameEng: "50 Items (KIT KAT)", nameTam: "50 ஐட்டம்ஸ் (கிட்காட்)", rate: 900.00, per: "1 Box" },
+            { sNo: 158, nameEng: "60 Items (MILKY BAR)", nameTam: "60 ஐட்டம்ஸ் (மில்க்கி பார்)", rate: 1200.00, per: "1 Box" }
           ]
         }
       ]

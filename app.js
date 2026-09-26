@@ -1,5 +1,5 @@
 // Storage Key
-const STORAGE_KEY = 'tamilmani_pricelist_state_v1';
+const STORAGE_KEY = 'tamilmani_pricelist_state_v3';
 
 // Application State
 let appData = {
@@ -22,6 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Load data: Read directly from PRICELIST_DATA, preserving any user quantities
 function loadData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      appData = JSON.parse(saved);
+      appData.categories.forEach(cat => {
+        cat.items.forEach(it => {
+          if (it.mrp === undefined || isNaN(it.mrp)) {
+            it.mrp = (parseFloat(it.rate) || 0) * 10;
+          }
+        });
+      });
+      normalizeItemIds();
+      return;
+    } catch (e) {
+      console.error('Failed to parse localStorage data, falling back to PRICELIST_DATA', e);
+    }
+  }
+
   const flatCategories = [];
   PRICELIST_DATA.pages.forEach(p => {
     p.sections.forEach(s => {
@@ -35,6 +53,7 @@ function loadData() {
           nameEng: it.nameEng,
           nameTam: it.nameTam,
           rate: parseFloat(it.rate) || 0,
+          mrp: it.mrp !== undefined ? parseFloat(it.mrp) : ((parseFloat(it.rate) || 0) * 10),
           per: it.per
         }))
       });
@@ -72,31 +91,34 @@ function recalculateSerialNumbers() {
   });
 }
 
-// Distribute categories and items into pages (Strict 50 items per page limit)
+// Distribute categories and items into pages (Strict A4 height row budget)
 function paginateData() {
   recalculateSerialNumbers();
   const pages = [];
   let currentPageCategories = [];
-  let currentItemsInPage = 0;
-  const MAX_PRODUCTS_PER_PAGE = 50;
+  let currentRowsInPage = 0;
+  const MAX_ROWS_PER_PAGE = 46; // Exact fit for 4 pages containing all 158 items
 
   appData.categories.forEach((cat, catIdx) => {
     let itemsRemaining = [...cat.items];
+    const hasCatHeader = (cat.categoryEng || cat.categoryTam || isEditMode) ? 1 : 0;
 
     while (itemsRemaining.length > 0) {
-      const spaceAvailable = MAX_PRODUCTS_PER_PAGE - currentItemsInPage;
+      const isNewPageForCat = (currentPageCategories.length === 0);
+      const catHeaderWeight = isNewPageForCat ? hasCatHeader : (hasCatHeader ? 1 : 0);
+      const spaceAvailable = MAX_ROWS_PER_PAGE - currentRowsInPage - catHeaderWeight;
 
-      if (spaceAvailable <= 0) {
-        // Current page is full, push it and start a new page
+      if (spaceAvailable <= 0 && currentPageCategories.length > 0) {
         pages.push({
           pageNumber: pages.length + 1,
           categories: currentPageCategories
         });
         currentPageCategories = [];
-        currentItemsInPage = 0;
+        currentRowsInPage = 0;
+        continue;
       }
 
-      const takeCount = Math.min(itemsRemaining.length, MAX_PRODUCTS_PER_PAGE - currentItemsInPage);
+      const takeCount = Math.max(1, Math.min(itemsRemaining.length, Math.max(1, spaceAvailable)));
       const itemsForThisPage = itemsRemaining.splice(0, takeCount);
 
       currentPageCategories.push({
@@ -108,7 +130,7 @@ function paginateData() {
         items: itemsForThisPage
       });
 
-      currentItemsInPage += takeCount;
+      currentRowsInPage += (hasCatHeader ? 1 : 0) + itemsForThisPage.length;
     }
 
     // If category has no items yet (empty category)
@@ -121,6 +143,7 @@ function paginateData() {
         originalCatIndex: catIdx,
         items: []
       });
+      currentRowsInPage += (hasCatHeader ? 1 : 0);
     }
   });
 
@@ -129,12 +152,6 @@ function paginateData() {
       pageNumber: pages.length + 1,
       categories: currentPageCategories
     });
-  }
-
-  // Ensure minimum pages matching user created pages
-  const minPages = appData.manualPageCount || 3;
-  while (pages.length < minPages) {
-    pages.push({ pageNumber: pages.length + 1, categories: [] });
   }
 
   return pages;
@@ -147,12 +164,21 @@ function renderAllPages() {
 
   const pages = paginateData();
 
-  // Update Page Jump Links in Toolbar
+  // Update Page Jump Links in Toolbar with dynamic ranges
   const jumpLinks = document.querySelector('.page-jump-links');
   if (jumpLinks) {
-    jumpLinks.innerHTML = pages.map(p => 
-      `<a href="#page-${p.pageNumber}" class="page-chip">Page ${p.pageNumber}</a>`
-    ).join('');
+    jumpLinks.innerHTML = pages.map(p => {
+      let minSno = null;
+      let maxSno = null;
+      p.categories.forEach(c => {
+        c.items.forEach(it => {
+          if (minSno === null || it.sNo < minSno) minSno = it.sNo;
+          if (maxSno === null || it.sNo > maxSno) maxSno = it.sNo;
+        });
+      });
+      const rangeText = minSno !== null ? ` (${minSno} - ${maxSno})` : '';
+      return `<a href="#page-${p.pageNumber}" class="page-chip">Page ${p.pageNumber}${rangeText}</a>`;
+    }).join('');
   }
 
   pages.forEach((pageData) => {
@@ -183,14 +209,16 @@ function renderAllPages() {
     const table = document.createElement('table');
     table.className = 'pricelist-table';
 
-    // Table Header (Red) with 2 columns for English & Tamil
+    // Table Header (Red) with single-line columns for English & Tamil, MRP Rate, Per, 90% Discount Rate, Qty, Amount
     table.innerHTML = `
       <thead>
         <tr>
-          <th class="col-sno">S.<br/>No.</th>
-          <th colspan="2" class="col-name">PRODUCT NAME</th>
-          <th class="col-rate">RATE</th>
+          <th class="col-sno">S.No</th>
+          <th class="col-name-eng">PRODUCT NAME</th>
+          <th class="col-name-tam">பொருளின் பெயர்</th>
+          <th class="col-mrp">MRP RATE</th>
           <th class="col-per">PER</th>
+          <th class="col-rate">90%<br/><span class="th-sub">DISCOUNT RATE</span></th>
           <th class="col-qty">QTY</th>
           <th class="col-amt">AMOUNT</th>
           ${isEditMode ? '<th class="col-actions no-print">ACTION</th>' : ''}
@@ -218,8 +246,9 @@ function renderAllPages() {
           <td class="cat-cell cat-sno">${isEditMode ? '☰' : ''}</td>
           <td class="cat-cell cat-name-eng" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-field="categoryEng">${cat.categoryEng}</td>
           <td class="cat-cell cat-name-tam" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-field="categoryTam">${cat.categoryTam}</td>
-          <td class="cat-cell cat-rate"></td>
+          <td class="cat-cell cat-mrp"></td>
           <td class="cat-cell cat-per"></td>
+          <td class="cat-cell cat-rate"></td>
           <td class="cat-cell cat-qty"></td>
           <td class="cat-cell cat-amt"></td>
           ${isEditMode ? `
@@ -244,15 +273,19 @@ function renderAllPages() {
 
         const currentQty = quantities[item.id] || '';
         const currentAmt = currentQty ? (item.rate * currentQty).toFixed(2) : '';
+        const mrpVal = (item.mrp !== undefined ? item.mrp : item.rate * 10).toFixed(2);
 
         tr.innerHTML = `
           <td class="cell-sno">${isEditMode ? `<span class="drag-handle">☰</span> ` : ''}${item.sNo}</td>
           <td class="cell-name-eng" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-item-idx="${itemIdx}" data-field="nameEng">${item.nameEng}</td>
           <td class="cell-name-tam" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-item-idx="${itemIdx}" data-field="nameTam">${item.nameTam}</td>
+          <td class="cell-mrp">
+            <span class="mrp-val" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-item-idx="${itemIdx}" data-field="mrp">${mrpVal}</span>
+          </td>
+          <td class="cell-per" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-item-idx="${itemIdx}" data-field="per">${item.per}</td>
           <td class="cell-rate">
             <span class="rate-val" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-item-idx="${itemIdx}" data-field="rate">${item.rate.toFixed(2)}</span>
           </td>
-          <td class="cell-per" ${isEditMode ? 'contenteditable="true"' : ''} data-cat-idx="${actualCatIdx}" data-item-idx="${itemIdx}" data-field="per">${item.per}</td>
           <td class="cell-qty">
             <input type="number" min="0" step="1" class="qty-input ${currentQty > 0 ? 'active-qty' : ''}" data-item-id="${item.id}" data-rate="${item.rate}" value="${currentQty}" />
           </td>
@@ -274,25 +307,23 @@ function renderAllPages() {
 
     tableContainer.appendChild(table);
 
-    // Bank Details Footer ONLY on the LAST page
-    if (pageData.pageNumber === pages.length) {
-      const bankFooter = document.createElement('div');
-      bankFooter.className = 'page-footer-bank';
-      const b = appData.bankDetails;
-      bankFooter.innerHTML = `
-        <div class="bank-row-1">
-          <span class="bank-col-1">Name: <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="name">${b.name}</span></span>
-          <span class="bank-col-2">Bank : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="bank">${b.bank}</span></span>
-          <span class="bank-col-3">Gpay: <span class="bank-gpay" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="gpay">${b.gpay}</span></span>
-        </div>
-        <div class="bank-row-2">
-          <span class="bank-col-1">A/c : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="accountNo">${b.accountNo}</span></span>
-          <span class="bank-col-2">IFSC : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="ifsc">${b.ifsc}</span></span>
-          <span class="bank-col-3 page-total-summary" style="font-weight: 800; color: #b91c1c;"></span>
-        </div>
-      `;
-      tableContainer.appendChild(bankFooter);
-    }
+    // Bank Details Footer on EVERY page
+    const bankFooter = document.createElement('div');
+    bankFooter.className = 'page-footer-bank';
+    const b = appData.bankDetails;
+    bankFooter.innerHTML = `
+      <div class="bank-row-1">
+        <span class="bank-col-1">Name: <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="name">${b.name}</span></span>
+        <span class="bank-col-2">Bank : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="bank">${b.bank}</span></span>
+        <span class="bank-col-3">Gpay: <span class="bank-gpay" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="gpay">${b.gpay}</span></span>
+      </div>
+      <div class="bank-row-2">
+        <span class="bank-col-1">A/c : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="accountNo">${b.accountNo}</span></span>
+        <span class="bank-col-2">IFSC : <span class="bank-highlight" ${isEditMode ? 'contenteditable="true"' : ''} data-bank="ifsc">${b.ifsc}</span></span>
+        <span class="bank-col-3 page-total-summary" style="font-weight: 800; color: #b91c1c;"></span>
+      </div>
+    `;
+    tableContainer.appendChild(bankFooter);
 
     pageElem.appendChild(tableContainer);
     container.appendChild(pageElem);
@@ -349,6 +380,9 @@ function attachTableEventListeners() {
       if (bankField) {
         appData.bankDetails[bankField] = text;
         saveData();
+        document.querySelectorAll(`[data-bank="${bankField}"]`).forEach(el => {
+          if (el !== e.target) el.innerText = text;
+        });
         return;
       }
 
@@ -356,12 +390,46 @@ function attachTableEventListeners() {
         const c = parseInt(catIdx);
         if (itemIdx !== undefined) {
           const i = parseInt(itemIdx);
+          const itemObj = appData.categories[c].items[i];
+          const row = e.target.closest('tr');
+
           if (field === 'rate') {
             const num = parseFloat(text) || 0;
-            appData.categories[c].items[i].rate = num;
+            itemObj.rate = num;
+            itemObj.mrp = Math.round(num * 10 * 100) / 100;
             e.target.innerText = num.toFixed(2);
+            
+            const mrpSpan = row?.querySelector('.mrp-val');
+            if (mrpSpan) mrpSpan.innerText = (num * 10).toFixed(2);
+            
+            const qtyInput = row?.querySelector('.qty-input');
+            if (qtyInput) qtyInput.dataset.rate = num;
+
+            const amtCell = document.getElementById(`amt-${itemObj.id}`);
+            const qty = quantities[itemObj.id] || 0;
+            if (amtCell && qty > 0) {
+              amtCell.innerText = (num * qty).toFixed(2);
+            }
+          } else if (field === 'mrp') {
+            const mrpNum = parseFloat(text) || 0;
+            const rateNum = Math.round(mrpNum * 0.10 * 100) / 100;
+            itemObj.mrp = mrpNum;
+            itemObj.rate = rateNum;
+            e.target.innerText = mrpNum.toFixed(2);
+
+            const rateSpan = row?.querySelector('.rate-val');
+            if (rateSpan) rateSpan.innerText = rateNum.toFixed(2);
+
+            const qtyInput = row?.querySelector('.qty-input');
+            if (qtyInput) qtyInput.dataset.rate = rateNum;
+
+            const amtCell = document.getElementById(`amt-${itemObj.id}`);
+            const qty = quantities[itemObj.id] || 0;
+            if (amtCell && qty > 0) {
+              amtCell.innerText = (rateNum * qty).toFixed(2);
+            }
           } else {
-            appData.categories[c].items[i][field] = text;
+            itemObj[field] = text;
           }
         } else {
           appData.categories[c][field] = text;
@@ -496,8 +564,9 @@ function addNewProduct() {
   const nameEng = prompt('Enter Product Name in English:');
   if (!nameEng) return;
   const nameTam = prompt('Enter Product Name in Tamil:') || '';
-  const rateInput = prompt('Enter RATE (Price):', '100');
+  const rateInput = prompt('Enter 90% Discount RATE (Price):', '100');
   const rate = parseFloat(rateInput) || 0;
+  const mrp = Math.round(rate * 10 * 100) / 100;
   const per = prompt('Enter PER unit (1 Pkt, 1 Box, 1 Bag):', '1 Box') || '1 Box';
 
   appData.categories[catIdx].items.push({
@@ -505,6 +574,7 @@ function addNewProduct() {
     nameEng: nameEng,
     nameTam: nameTam,
     rate: rate,
+    mrp: mrp,
     per: per
   });
 
@@ -573,6 +643,7 @@ function addNewPage() {
         nameEng: 'New Cracker 1',
         nameTam: 'புதிய வெடி 1',
         rate: 100,
+        mrp: 1000,
         per: '1 Box'
       }
     ]
@@ -701,8 +772,9 @@ function exportToExcel() {
         'S.No': item.sNo,
         'Product Name (English)': item.nameEng,
         'Product Name (Tamil)': item.nameTam,
-        'Rate (₹)': item.rate,
+        'MRP Rate (₹)': (item.mrp !== undefined ? item.mrp : item.rate * 10).toFixed(2),
         'Per': item.per,
+        '90% Discount Rate (₹)': item.rate.toFixed(2),
         'Quantity': qty,
         'Amount (₹)': amount
       });
@@ -743,7 +815,8 @@ function handleExcelUpload(event) {
         const catTam = (row['Category (Tamil)'] || '').toString().trim();
         const nameEng = (row['Product Name (English)'] || row['Product Name'] || row['Name'] || row['Item Name'] || row['English Name'] || `Item ${index + 1}`).toString().trim();
         const nameTam = (row['Product Name (Tamil)'] || row['Tamil Name'] || '').toString().trim();
-        const rate = parseFloat(row['Rate (₹)'] || row['Rate'] || row['Price'] || row['RATE'] || 0) || 0;
+        const rate = parseFloat(row['90% Discount Rate (₹)'] || row['90% Discount Rate'] || row['90% Rate'] || row['Rate (₹)'] || row['Rate'] || row['Price'] || row['RATE'] || 0) || 0;
+        const mrp = parseFloat(row['MRP Rate (₹)'] || row['MRP Rate'] || row['MRP'] || 0) || (rate * 10);
         const per = (row['Per'] || row['PER'] || row['Unit'] || '1 Box').toString().trim();
 
         const catKey = catEng.toUpperCase();
@@ -763,6 +836,7 @@ function handleExcelUpload(event) {
           nameEng: nameEng,
           nameTam: nameTam,
           rate: rate,
+          mrp: mrp,
           per: per
         });
       });
